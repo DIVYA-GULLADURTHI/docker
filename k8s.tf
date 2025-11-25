@@ -1,22 +1,22 @@
-resource "aws_instance" "docker" {
+resource "aws_instance" "k8s" {
   ami           = local.ami_id
   #instance_type = "t3.micro"
-  vpc_security_group_ids = [aws_security_group.allow_all_docker.id]
+  vpc_security_group_ids = [aws_security_group.allow_all_k8s.id]
   instance_type = "t3.medium"
   # need more for terraform
   root_block_device {
     volume_size = 50
     volume_type = "gp3" # or "gp2", depending on your preference
   }
-  user_data = file("docker.sh")
+  user_data = file("k8s.sh")
   #iam_instance_profile = "TerraformAdmin"
   tags = {
-     Name = "${var.project}-${var.environment}-docker"
+     Name = "${var.project}-${var.environment}-k8s"
   }
 }
 
-resource "aws_security_group" "allow_all_docker" {
-    name        = "allow_all_docker"
+resource "aws_security_group" "allow_all_k8s" {
+    name        = "allow_all_k8s"
     description = "allow all traffic"
 
     ingress {
@@ -39,6 +39,6 @@ resource "aws_security_group" "allow_all_docker" {
     }
 
     tags = {
-        Name = "allow-all-docker"
+        Name = "allow-all-k8s"
     }
 }
